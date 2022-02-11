@@ -22,14 +22,18 @@ def index(request):
     context_dict['pages'] = page_list
 
     visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
 
     # Obtain our Response object early so we can add cookie information.
     return render(request, 'rango/index.html', context=context_dict)
 
 
 def about(request):
-    return render(request, 'rango/about.html', context={})
+    context_dict = {}
+
+    visitor_cookie_handler(request)
+    context_dict['visits'] = request.session['visits']
+
+    return render(request, 'rango/about.html', context=context_dict)
 
 def show_category(request, category_name_slug):
     # Create a context dictionary which we can pass
@@ -253,6 +257,7 @@ def visitor_cookie_handler(request):
     request.session['visits'] = visits
 
     # A helper method
+
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
     if not val:
